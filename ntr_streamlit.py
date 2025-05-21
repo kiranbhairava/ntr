@@ -97,12 +97,12 @@ with st.container():
 st.markdown("---")
 
 with st.form("ask_form", clear_on_submit=True):
-    user_input = st.text_input("మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి...", key="input", autocomplete="off")
-    submitted = st.form_submit_button("అడుగు")
+    user_input = st.text_input("I am NTR, Ask me anything", key="input", autocomplete="off")
+    submitted = st.form_submit_button("ASK")
 
 if submitted and user_input:
     st.session_state['chat_history'].append({'role': 'user', 'content': user_input})
-    with st.spinner('NTR టైపింగ్ చేస్తున్నారు...'):
+    with st.spinner('NTR is Typing...'):
         test_prompt = f"{prompt}\nUser question: {user_input}"
         try:
             response = model.generate_content(test_prompt)
@@ -110,8 +110,8 @@ if submitted and user_input:
             if not ntr_reply and hasattr(response, 'candidates') and response.candidates:
                 ntr_reply = next((c.content for c in response.candidates if hasattr(c, 'content') and c.content), None)
             if not ntr_reply:
-                ntr_reply = 'క్షమించండి, సమాధానం ఇవ్వలేకపోయాను.'
+                ntr_reply = 'Sorry, Unable to answer'
         except Exception as e:
-            ntr_reply = 'సర్వర్ లో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.'
+            ntr_reply = 'Server error, Try again'
         st.session_state['chat_history'].append({'role': 'ntr', 'content': ntr_reply})
         st.rerun()
